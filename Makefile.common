@@ -1,0 +1,19 @@
+VERBOSE ?= 0
+PRETTY  ?= 0
+ABSOLUTE_PATHS  ?= 0
+PASS_INCLUDE_PATHS_VIA_FILE ?= 0
+PASS_LINKER_INPUT_VIA_FILE  ?= 1
+
+.SUFFIXES:  # ignore built-in rules
+%.d:        # don't try to make .d files
+.PRECIOUS: %.d %.o
+
+MK := mkdir
+RM := rm -rf
+
+# echo suspend
+ifeq ($(VERBOSE),1)
+    NO_ECHO :=
+else
+    NO_ECHO := @
+endif
