@@ -11,32 +11,49 @@
 #ifndef __FSM_H__
 #define __FSM_H__
 
-#ifdef __cplusplus
-extern "C"
+struct fsm_obj_s;
+
+struct fsm_state_t
 {
-#endif
+    // name of state
+    char *p_name;
+    // pointer function
+    void(*func_t)(struct fsm_obj_s*, int, void**);
 
-/*******************************************************************************
-**                               INCLUDES
-*******************************************************************************/
+    // next state
+    struct fsm_state_t *p_next;
+};
 
-/*******************************************************************************
-**                                DEFINES
-*******************************************************************************/
-// clang-format off
+struct fsm_obj_s
+{
+    // state default
+    struct fsm_state_t *fsm_base;
+    // state current
+    struct fsm_state_t *fsm_cur_state;
+    // name state current
+    char *fsm_cur_state_name;
 
-// clang-format on
-/*******************************************************************************
-**                     EXTERNAL VARIABLE DECLARATIONS
-*******************************************************************************/
+    int fsm_arg_num;
 
-/*******************************************************************************
-**                     EXTERNAL FUNCTION DECLARATIONS
-*******************************************************************************/
+    void** fsm_arg_value;
 
-#ifdef __cplusplus
-}
-#endif
+};
+
+int fsm_init(struct fsm_obj_s *fsm_obj);
+
+int fsm_add(struct fsm_obj_s *fsm_obj, char *name, void(*func_t)(struct fsm_obj_s*, int, void**));
+
+int fsm_next_state(struct fsm_obj_s fsm_obj);
+
+int fsm_remove(struct fsm_obj_s, char *name);
+
+int fsm_main(struct fsm_obj_s);
+
+int fsm_to_state(struct fsm_obj_s fsm_obj, char *name, int num, void** arg);
+
+int fsm_default(struct fsm_obj_s fsm_obj, void(*func_t)(struct fsm_obj_s, int, void**));
+
+void fsm_terminate(struct fsm_obj_s);
 
 #endif /* __FSM_H__ */
 

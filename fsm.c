@@ -12,7 +12,10 @@
 /*******************************************************************************
 **                                INCLUDES
 *******************************************************************************/
-
+#include "fsm.h"
+#include "stdlib.h"
+#include "string.h"
+#include "stdio.h"
 /*******************************************************************************
 **                       INTERNAL MACRO DEFINITIONS
 *******************************************************************************/
@@ -34,6 +37,122 @@
 /*******************************************************************************
 **                          FUNCTION DEFINITIONS
 *******************************************************************************/
+
+/**
+ * @brief : function initializes fsm
+ * 
+ * @param fsm_obj : obj
+ * @return int 
+ */
+int fsm_init(struct fsm_obj_s *fsm_obj)
+{
+    fsm_obj->fsm_base = NULL;
+    fsm_obj->fsm_cur_state = NULL;
+    fsm_obj->fsm_arg_num = 0;
+    fsm_obj->fsm_arg_value = NULL;
+    return 0;
+}
+
+int fsm_next_state(struct fsm_obj_s *obj)
+{
+	struct fsm_state_t *tmp = obj->fsm_base;
+	if ((obj->fsm_base == NULL) || (obj->fsm_cur_state_name == NULL))
+	{
+		return -1;
+	}
+	while ((tmp->name != obj->fsm_cur_state_name) && (tmp != NULL))
+	{
+		tmp = tmp->p_next;
+	}
+	if (tmp == NULL)
+	{
+		return -1;
+	}
+	tmp->func_t(obj, obj->fsm_arg_num, obj->fsm_arg_value);
+	return 0;
+}
+
+int fsm_main(struct fsm_obj_s *obj)
+{
+	while (!fsm_next_state(obj));
+	return 0;
+}
+
+int fsm_add(struct fsm_obj_s *obj, char *name, void(*func)(struct fsm_obj_s*, int, void**))
+{
+	struct fsm_state_t *tmp = obj->fsm_base;
+	struct fsm_state_t *new_state = (struct fsm_state_t*)malloc(sizeof(struct fsm_state_t));
+	while (tmp->p_next)
+	{
+		tmp = tmp->p_next;
+	}
+	new_state->name = name;
+	new_state->func_t = func;
+	new_state->p_next = NULL;
+	tmp->p_next = new_state;
+	
+	return 0;
+}
+
+int fsm_remove(struct fsm_obj_s *obj, char *name)
+{
+	if (!strcmp(name, "default"))
+		return -1;
+	struct fsm_state_t *to_del;
+	struct fsm_state_t *tmp = obj->fsm_base;
+	while ((tmp->p_next != NULL) && (strcmp(tmp->p_next->name, name)))
+	{
+		tmp = tmp->p_next;
+	}
+	if (tmp == NULL)
+	{
+		return - 1;
+	}
+	to_del = tmp->p_next;
+	tmp->p_next = tmp->p_next->p_next;
+	free(to_del);
+	return 0;
+}
+
+int fsm_to_state(struct fsm_obj_s *obj, char *name, int num, void** arg)
+{
+	struct fsm_state_t *tmp = obj->fsm_base;
+	while ((tmp != NULL) && (strcmp(tmp->name, name)))
+		tmp = tmp->p_next;
+	if (tmp == NULL)
+		return -1;
+	obj->fsm_cur_state = tmp;
+	obj->fsm_cur_state_name = name;
+	obj->fsm_arg_num = num;
+	obj->fsm_arg_value = arg;
+	return 0;
+}
+
+int fsm_default(struct fsm_obj_s *obj, void(*func)(struct fsm_obj_s *, int, void **))
+{
+	obj->fsm_base = (struct fsm_state_t*)malloc(sizeof(struct fsm_state_t));
+	obj->fsm_base->name = "default";
+	obj->fsm_base->func_t = func;
+	obj->fsm_base->p_next = NULL;
+	obj->fsm_cur_state = obj->fsm_base;
+	obj->fsm_cur_state_name = obj->fsm_base->name;
+	return 0;
+}
+
+void fsm_terminate(struct fsm_obj_s *obj)
+{
+	struct fsm_state_t *tmp = obj->fsm_base;
+	struct fsm_state_t *to_del = tmp;
+	while (tmp)
+	{
+		to_del = tmp;
+		tmp = tmp->p_next;
+		free(to_del);
+	}
+	obj->fsm_cur_state = NULL;
+	obj->fsm_cur_state_name = NULL;
+	obj->fsm_base = NULL;
+}
 
 
 /******************************** End of file *********************************/

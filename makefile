@@ -13,10 +13,6 @@ C_FLAGS =
 CC		= g++
 SZ		= size
 
-.PHONY: default help
-
-default: fsm
-
 help:
 	@echo following targets are available:
 	@echo fsm
