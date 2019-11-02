@@ -13,6 +13,7 @@
 *******************************************************************************/
 #include <stdio.h>
 #include "fsm.h"
+#include <windows.h>
 /*******************************************************************************
 **                       INTERNAL MACRO DEFINITIONS
 *******************************************************************************/
@@ -34,10 +35,69 @@
 /*******************************************************************************
 **                          FUNCTION DEFINITIONS
 *******************************************************************************/
+
+/**
+ * @brief 
+ * 
+ * @param obj 
+ * @param num 
+ * @param arg 
+ */
+void default_func(struct fsm_obj_s *obj, int num, void **arg)
+{
+	// state default
+	// printf("%d\n", num);
+	printf("%s\n", obj->fsm_cur_state_name);
+	fsm_to_state(obj, "step2", 0, NULL);
+	Sleep(1000);
+}
+
+/**
+ * @brief 
+ * 
+ * @param obj 
+ * @param num 
+ * @param arg 
+ */
+void step1(struct fsm_obj_s *obj, int num, void **arg)
+{
+	// state step 1
+	// printf("%d\n", num);
+	printf("%s\n", obj->fsm_cur_state_name);
+	fsm_to_state(obj, "default", 0, NULL);
+	Sleep(1000);
+}
+
+/**
+ * @brief 
+ * 
+ * @param obj 
+ * @param num 
+ * @param arg 
+ */
+void step2(struct fsm_obj_s *obj, int num, void **arg)
+{
+	// printf("%d\n", num);
+	printf("%s\n", obj->fsm_cur_state_name);
+	fsm_to_state(obj, "step1", 0, NULL);
+	Sleep(1000);
+}
+
+/**
+ * @brief 
+ * 
+ * @return int 
+ */
 int main()
 {
-    printf("start !! \n");
+	struct fsm_obj_s obj;
 
+	fsm_init(&obj);
+    printf("start !! \n");
+	fsm_default(&obj, default_func);
+	fsm_add(&obj, "step1", step1);
+	fsm_add(&obj, "step2", step2);
+	fsm_main(&obj);
 
     return 0;
 }

@@ -44,18 +44,25 @@
  * @param fsm_obj : obj
  * @return int 
  */
-int fsm_init(struct fsm_obj_s *fsm_obj)
+int fsm_init(struct fsm_obj_s *obj)
 {
-    fsm_obj->fsm_base = NULL;
-    fsm_obj->fsm_cur_state = NULL;
-    fsm_obj->fsm_arg_num = 0;
-    fsm_obj->fsm_arg_value = NULL;
+    obj->fsm_base = NULL;
+    obj->fsm_cur_state = NULL;
+    obj->fsm_arg_num = 0;
+    obj->fsm_arg_value = NULL;
     return 0;
 }
 
+/**
+ * @brief : function next state
+ * 
+ * @param obj : object
+ * @return int 
+ */
 int fsm_next_state(struct fsm_obj_s *obj)
 {
 	struct fsm_state_t *tmp = obj->fsm_base;
+	// check obj->fsm 
 	if ((obj->fsm_base == NULL) || (obj->fsm_cur_state_name == NULL))
 	{
 		return -1;
@@ -78,6 +85,14 @@ int fsm_main(struct fsm_obj_s *obj)
 	return 0;
 }
 
+/**
+ * @brief : function add state
+ * 
+ * @param obj : object 
+ * @param name : name state
+ * @param func : pointer function
+ * @return int 
+ */
 int fsm_add(struct fsm_obj_s *obj, char *name, void(*func)(struct fsm_obj_s*, int, void**))
 {
 	struct fsm_state_t *tmp = obj->fsm_base;
@@ -94,6 +109,13 @@ int fsm_add(struct fsm_obj_s *obj, char *name, void(*func)(struct fsm_obj_s*, in
 	return 0;
 }
 
+/**
+ * @brief : function remove state 
+ * 
+ * @param obj : object
+ * @param name : name state
+ * @return int 
+ */
 int fsm_remove(struct fsm_obj_s *obj, char *name)
 {
 	if (!strcmp(name, "default"))
@@ -114,6 +136,15 @@ int fsm_remove(struct fsm_obj_s *obj, char *name)
 	return 0;
 }
 
+/**
+ * @brief : function 
+ * 
+ * @param obj 
+ * @param name 
+ * @param num 
+ * @param arg 
+ * @return int 
+ */
 int fsm_to_state(struct fsm_obj_s *obj, char *name, int num, void** arg)
 {
 	struct fsm_state_t *tmp = obj->fsm_base;

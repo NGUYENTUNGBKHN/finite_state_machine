@@ -10,7 +10,7 @@ INC_FOLDERS +=\
 
 C_FLAGS =
 
-CC		= g++
+CC		= gcc
 SZ		= size
 
 help:

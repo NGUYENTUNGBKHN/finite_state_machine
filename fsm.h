@@ -16,7 +16,7 @@ struct fsm_obj_s;
 struct fsm_state_t
 {
     // name of state
-    char *p_name;
+    char *name;
     // pointer function
     void(*func_t)(struct fsm_obj_s*, int, void**);
 
@@ -39,21 +39,21 @@ struct fsm_obj_s
 
 };
 
-int fsm_init(struct fsm_obj_s *fsm_obj);
+int fsm_init(struct fsm_obj_s *obj);
 
-int fsm_add(struct fsm_obj_s *fsm_obj, char *name, void(*func_t)(struct fsm_obj_s*, int, void**));
+int fsm_add(struct fsm_obj_s *obj, char *name, void(*func)(struct fsm_obj_s*, int, void**));
 
-int fsm_next_state(struct fsm_obj_s fsm_obj);
+int fsm_next_state(struct fsm_obj_s *obj);
 
-int fsm_remove(struct fsm_obj_s, char *name);
+int fsm_remove(struct fsm_obj_s *obj, char *name);
 
-int fsm_main(struct fsm_obj_s);
+int fsm_main(struct fsm_obj_s *obj);
 
-int fsm_to_state(struct fsm_obj_s fsm_obj, char *name, int num, void** arg);
+int fsm_to_state(struct fsm_obj_s *obj, char *name, int num, void** arg);
 
-int fsm_default(struct fsm_obj_s fsm_obj, void(*func_t)(struct fsm_obj_s, int, void**));
+int fsm_default(struct fsm_obj_s *obj, void(*func)(struct fsm_obj_s *, int, void**));
 
-void fsm_terminate(struct fsm_obj_s);
+void fsm_terminate(struct fsm_obj_s *obj);
 
 #endif /* __FSM_H__ */
 
