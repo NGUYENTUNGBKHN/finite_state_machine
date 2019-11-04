@@ -55,6 +55,8 @@ int fsm_default(struct fsm_obj_s *obj, void(*func)(struct fsm_obj_s *, int, void
 
 void fsm_terminate(struct fsm_obj_s *obj);
 
+int test(struct fsm_obj_s *obj, char *name, int num, void** arg);
+
 #endif /* __FSM_H__ */
 
 /******************************** End of file *********************************/

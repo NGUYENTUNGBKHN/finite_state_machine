@@ -3,14 +3,14 @@ TARGETS			= fsm
 OUTPUT_DIR		= _build
 
 SRC_FILES +=\
-	main.c\
-	fsm.c\
+	main.cpp\
+	fsm.cpp\
 
 INC_FOLDERS +=\
 
-C_FLAGS =
+C_FLAGS = -Wall
 
-CC		= gcc
+CC		= g++
 SZ		= size
 
 help:
@@ -20,17 +20,17 @@ help:
 
 include Makefile.common
 
-$(foreach target, $(TARGETS), $(call define_target, $(target)))
 
-OBJECTS := $(SRC_FILES:%.c=$(OUTPUT_DIR)/%.o)
+OBJECTS := $(SRC_FILES:%.cpp=$(OUTPUT_DIR)/%.o)
 
 all: build $(OUTPUT_DIR)/$(TARGETS)
 
-$(OUTPUT_DIR)/%.o: %.c
+$(OUTPUT_DIR)/%.o: %.cpp
 	@echo compiling : $(notdir $<)
 	@$(CC) $(C_FLAGS) $(INC_FOLDERS) -o $@ -c $<
 
 $(OUTPUT_DIR)/$(TARGETS): $(OBJECTS)
+	@rm -rf $(OUTPUT_DIR)/$(TARGETS).exe
 	@echo Preparing: $(TARGETS).exe
 	@$(CC) $(C_FLAGS) $(INC_FOLDERS) -o $(OUTPUT_DIR)/$(TARGETS) $(OBJECTS)
 

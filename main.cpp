@@ -1,5 +1,5 @@
 /**
- * @file main.c
+ * @file main.cpp
  * @author N.T.Tung (nguyenthanhtung8196@gmail.com)
  * @brief 
  * @version 0.1
@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include "fsm.h"
 #include <windows.h>
+// #include <unistd.h>
 /*******************************************************************************
 **                       INTERNAL MACRO DEFINITIONS
 *******************************************************************************/
@@ -49,7 +50,8 @@ void default_func(struct fsm_obj_s *obj, int num, void **arg)
 	// printf("%d\n", num);
 	printf("%s\n", obj->fsm_cur_state_name);
 	fsm_to_state(obj, "step2", 0, NULL);
-	Sleep(1000);
+	//test(obj, "step1", 0, NULL);
+	//Sleep(1000);
 }
 
 /**
@@ -65,7 +67,7 @@ void step1(struct fsm_obj_s *obj, int num, void **arg)
 	// printf("%d\n", num);
 	printf("%s\n", obj->fsm_cur_state_name);
 	fsm_to_state(obj, "default", 0, NULL);
-	Sleep(1000);
+	//Sleep(1000);
 }
 
 /**
@@ -80,7 +82,7 @@ void step2(struct fsm_obj_s *obj, int num, void **arg)
 	// printf("%d\n", num);
 	printf("%s\n", obj->fsm_cur_state_name);
 	fsm_to_state(obj, "step1", 0, NULL);
-	Sleep(1000);
+	//Sleep(1000);
 }
 
 /**

@@ -1,5 +1,5 @@
 /**
- * @file fsm.c
+ * @file fsm.cpp
  * @author N.T.Tung (nguyenthanhtung8196@gmail.com)
  * @brief 
  * @version 0.1
@@ -148,10 +148,18 @@ int fsm_remove(struct fsm_obj_s *obj, char *name)
 int fsm_to_state(struct fsm_obj_s *obj, char *name, int num, void** arg)
 {
 	struct fsm_state_t *tmp = obj->fsm_base;
+
+	
 	while ((tmp != NULL) && (strcmp(tmp->name, name)))
+	{
 		tmp = tmp->p_next;
+	}
+	
 	if (tmp == NULL)
+	{
 		return -1;
+	}
+
 	obj->fsm_cur_state = tmp;
 	obj->fsm_cur_state_name = name;
 	obj->fsm_arg_num = num;
@@ -185,5 +193,28 @@ void fsm_terminate(struct fsm_obj_s *obj)
 	obj->fsm_base = NULL;
 }
 
+
+int test (struct fsm_obj_s *obj, char *name, int num, void** arg)
+{
+	struct fsm_state_t *tmp = obj->fsm_base;
+
+	while ((tmp != NULL) && (strcmp(tmp->name, name)))
+	{
+		tmp = tmp->p_next;
+	}
+	
+	if (tmp == NULL)
+	{
+		return -1;
+	}
+	
+	printf(" ok ");
+	obj->fsm_cur_state = tmp;
+	//FIXME: khong hieu lam
+	obj->fsm_cur_state_name = name;
+	obj->fsm_arg_num = num;
+	obj->fsm_arg_value = arg;
+	return 0;
+}
 
 /******************************** End of file *********************************/
