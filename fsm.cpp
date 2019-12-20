@@ -149,9 +149,10 @@ int fsm_to_state(struct fsm_obj_s *obj, char *name, int num, void** arg)
 {
 	struct fsm_state_t *tmp = obj->fsm_base;
 
-	
-	while ((tmp != NULL) && (strcmp(tmp->name, name)))
+	printf(" %s %s \n",tmp->name, name);
+	while ((tmp != NULL) && (strcmp(tmp->name, name) != 0))
 	{
+		printf(" %s %s \n",tmp->name, name);
 		tmp = tmp->p_next;
 	}
 	
